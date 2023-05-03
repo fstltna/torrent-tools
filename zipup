@@ -8,10 +8,18 @@ my $ZIPCMD = "";
 my $ZIPEXT = "";
 my $FILETYPE = $ARGV[0];
 my $ZIPFORMAT = $ARGV[1];
+my $REMOVE_ORIG = "";
+
+if ($ARGV[2] eq "remove")
+{
+	$REMOVE_ORIG = "TRUE";
+}
 
 if ($FILETYPE eq "")
 {
-	print("File type not specified - aborting\n");
+	print("Usage:\nzipup \<FILE TYPE\> \<COMPRESSION TYPE\> \[remove\]\n");
+	print("COMPRESSION TYPE: zip | 7z\n");
+	print("remove: delete the original file after compression\n");
 	exit 1;
 }
 print ("Processing file type = $FILETYPE\n");
@@ -46,6 +54,11 @@ while (my $filename = readdir(DIR))
 	{
 		print "File $filename matched\n";
 		system("$ZIPCMD \"$filename.$ZIPEXT\" \"$filename\"");
+		if ($REMOVE_ORIG ne "")
+		{
+			print "Deleting original $FILETYPE file...\n";
+			unlink($filename);
+		}
 	}
 }
 
