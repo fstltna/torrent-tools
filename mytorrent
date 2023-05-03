@@ -6,6 +6,9 @@ use warnings;
 my $VERSION = "1.0";
 my $HOME = $ENV{HOME};
 my $TRACKERSFILE = "$HOME/.trackers";
+my $TORRENT_COMMENT = "$HOME/.torrent_comment.txt";
+my @Trackers = ();
+my $MyComment = "";
 
 print "mytorrent v$VERSION\n";
 print "==================\n";
@@ -17,6 +20,7 @@ if (! -f $TRACKERSFILE)
 	system("updatetrackers");
 }
 my $SawVersion = "";
+my $NumTrackers = 0;
 open my $file, '<', $TRACKERSFILE or die("Unable to open tracker file: $!");
 while(<$file>)
 {
@@ -33,11 +37,24 @@ while(<$file>)
 	}
 	else
 	{
-		print "Saw tracker: $CurLine\n";
+		# print "Saw tracker: $CurLine\n";
+		push (@Trackers, $CurLine);
+		$NumTrackers += 1;
 	}
 }
 close $file;
 
+if (! -f $TORRENT_COMMENT)
+{
+	print "$TORRENT_COMMENT doesn't exist, please create it with your desired comment.\n";
+	exit 1;
+}
+open $file, '<', $TORRENT_COMMENT or die("Unable to open TORRENT_COMMENT: $!");
+$MyComment = <$file>;
+close ($file);
+chop ($MyComment);
+print "Saw $NumTrackers trackers\n";
+print "Using comment: $MyComment\n";
 
 my $TorrentCommand = "/usr/bin/transmission-create -c \"File supplied by Yu-Gi-Oh City - yugioph.gameplayer.club\" -t \"udp://torrentclub.space:6969/announce\" -t \"http://torrentclub.space:6969/announce\" -t \"udp://tracker.open-internet.nl:6969/announce\" -t \"udp://tracker.opentrackr.org:1337/announce\" -t \"udp://tracker.ilibr.org:80/announce\" -t \"http://p4p.arenabg.com:1337/announce\" -t \"udp://tracker.openbittorrent.com:6969/announce\" -t \"http://mgtracker.org:6969/announce\" -t \"http://openbittorrent.com:80/announce\" -t \"udp://tracker.torrent.eu.org:451/announce\" -t \"udp://opentracker.i2p.rocks:6969/announce\" -t \"udp://exodus.desync.com:6969/announce\" -t \"udp://public.popcorn-tracker.org:6969/announce\"";
 my $CurFile = "";
