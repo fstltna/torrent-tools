@@ -9,9 +9,25 @@ my $TRACKERSFILE = "$HOME/.trackers";
 my $TORRENT_COMMENT = "$HOME/.torrent_comment.txt";
 my @Trackers = ();
 my $MyComment = "";
+my $VERBOSE = "";
 
 print "mytorrent v$VERSION\n";
 print "==================\n";
+
+my $CurFile = "";
+if ($#ARGV >= 0)
+{
+	$CurFile = $ARGV[0];
+}
+else 
+{
+	print "Must specify the file to process\n";
+	exit 1;
+}
+if ($#ARGV == 1)
+{
+	$VERBOSE = 1;
+}
 
 print "Loading in $HOME/.trackers:\n";
 if (! -f $TRACKERSFILE)
@@ -37,7 +53,10 @@ while(<$file>)
 	}
 	else
 	{
-		# print "Saw tracker: $CurLine\n";
+		if ($VERBOSE)
+		{
+			print "Saw tracker: $CurLine\n";
+		}
 		push (@Trackers, $CurLine);
 		$NumTrackers += 1;
 	}
@@ -54,11 +73,23 @@ $MyComment = <$file>;
 close ($file);
 chop ($MyComment);
 print "Saw $NumTrackers trackers\n";
-print "Using comment: $MyComment\n";
+if ($VERBOSE)
+{
+	print "Using comment: $MyComment\n";
+}
 
-my $TorrentCommand = "/usr/bin/transmission-create -c \"File supplied by Yu-Gi-Oh City - yugioph.gameplayer.club\" -t \"udp://torrentclub.space:6969/announce\" -t \"http://torrentclub.space:6969/announce\" -t \"udp://tracker.open-internet.nl:6969/announce\" -t \"udp://tracker.opentrackr.org:1337/announce\" -t \"udp://tracker.ilibr.org:80/announce\" -t \"http://p4p.arenabg.com:1337/announce\" -t \"udp://tracker.openbittorrent.com:6969/announce\" -t \"http://mgtracker.org:6969/announce\" -t \"http://openbittorrent.com:80/announce\" -t \"udp://tracker.torrent.eu.org:451/announce\" -t \"udp://opentracker.i2p.rocks:6969/announce\" -t \"udp://exodus.desync.com:6969/announce\" -t \"udp://public.popcorn-tracker.org:6969/announce\"";
+my $TorrentCommand = "/usr/bin/transmission-create -c \"$MyComment\"";
+foreach (@Trackers)
+{
+	$TorrentCommand = "$TorrentCommand -t \"$_\"";
+}
+if ($VERBOSE)
+{
+	print "$TorrentCommand\n";
+}
+
 my $CurFile = "";
-if ($#ARGV == 0)
+if ($#ARGV >= 0)
 {
 	$CurFile = $ARGV[0];
 }
@@ -68,6 +99,11 @@ else
 	exit 1;
 }
 
+if (! -f $CurFile)
+{
+	print "Source file \"$CurFile\" does not exist\n";
+	exit 1;
+}
 print "Creating torrent file for $CurFile\n";
 
 system("$TorrentCommand \"$CurFile\"");
