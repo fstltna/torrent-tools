@@ -42,6 +42,11 @@ else
 	exit (1);
 }
 
+if ($REMOVE_ORIG ne "")
+{
+	print("Deleting source after compression\n");
+}
+
 my $TYPELEN = length($FILETYPE);
 
 my $dirname = '.';
