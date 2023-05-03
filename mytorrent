@@ -22,6 +22,8 @@ if ($#ARGV >= 0)
 else 
 {
 	print "Must specify the file to process\n";
+	print "Usage:\n";
+	print "mytorrent \<file to use\> \[verbose\]\n";
 	exit 1;
 }
 if ($#ARGV == 1)
@@ -88,7 +90,7 @@ if ($VERBOSE)
 	print "$TorrentCommand\n";
 }
 
-my $CurFile = "";
+$CurFile = "";
 if ($#ARGV >= 0)
 {
 	$CurFile = $ARGV[0];
