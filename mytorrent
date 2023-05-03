@@ -1,0 +1,19 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+my $TorrentCommand = "/usr/bin/transmission-create -c \"File supplied by Yu-Gi-Oh City - yugioph.gameplayer.club\" -t \"udp://torrentclub.space:6969/announce\" -t \"http://torrentclub.space:6969/announce\" -t \"udp://tracker.open-internet.nl:6969/announce\" -t \"udp://tracker.opentrackr.org:1337/announce\" -t \"udp://tracker.ilibr.org:80/announce\" -t \"http://p4p.arenabg.com:1337/announce\" -t \"udp://tracker.openbittorrent.com:6969/announce\" -t \"http://mgtracker.org:6969/announce\" -t \"http://openbittorrent.com:80/announce\" -t \"udp://tracker.torrent.eu.org:451/announce\" -t \"udp://opentracker.i2p.rocks:6969/announce\" -t \"udp://exodus.desync.com:6969/announce\" -t \"udp://public.popcorn-tracker.org:6969/announce\"";
+my $CurFile = shift;
+
+if ($CurFile eq "")
+{
+	print "Must specify the file to process\n";
+	exit 1;
+}
+
+print "Creating torrent file for $CurFile\n";
+
+system("$TorrentCommand \"$CurFile\"");
+
+exit 0;

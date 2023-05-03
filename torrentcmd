@@ -1,0 +1,26 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+my $TorrentCommand = "transmission-remote --auth username:abcde12345 -a";
+my $CurFile = shift;
+
+if ($CurFile eq "")
+{
+        print "Must specify the file to add\n";
+        exit 1;
+}
+
+print "Adding torrent file $CurFile\n";
+
+system("$TorrentCommand /var/lib/transmission-daemon/downloads/$CurFile");
+
+exit 0;
+
+
+
+
+
+# transmission-remote -n 'singfun:singfun' -a /var/lib/transmission-daemon/downloads/Nintendo-GameBoy-GameBoyColor.7z.torrent 
+

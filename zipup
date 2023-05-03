@@ -1,0 +1,54 @@
+#!/usr/bin/perl
+#
+# Zips all the files of specified type into ZIP files
+#
+
+
+my $ZIPCMD = "";
+my $ZIPEXT = "";
+my $FILETYPE = $ARGV[0];
+my $ZIPFORMAT = $ARGV[1];
+
+if ($FILETYPE eq "")
+{
+	print("File type not specified - aborting\n");
+	exit 1;
+}
+print ("Processing file type = $FILETYPE\n");
+
+if ($ZIPFORMAT eq "zip")
+{
+	$ZIPCMD = "/usr/bin/zip -9";
+	$ZIPEXT = "zip";
+	print ("Compressing with ZIP\n");
+}
+elsif ($ZIPFORMAT eq "7z")
+{
+	$ZIPCMD = "/usr/bin/7z a";
+	$ZIPEXT = "7z";
+	print ("Compressing with 7ZIP\n");
+}
+else
+{
+	print("You must specify a compression format:\nzip\n7z\n");
+	exit (1);
+}
+
+my $TYPELEN = length($FILETYPE);
+
+my $dirname = '.';
+opendir(DIR, $dirname) or die "Could not open the directory $dirname\n";
+
+while (my $filename = readdir(DIR))
+{
+#	print "$filename\n";
+	if (substr($filename, -$TYPELEN) eq $FILETYPE)
+	{
+		print "File $filename matched\n";
+		system("$ZIPCMD \"$filename.$ZIPEXT\" \"$filename\"");
+	}
+}
+
+closedir(DIR);
+
+exit 0;
