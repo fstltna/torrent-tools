@@ -3,7 +3,22 @@
 use strict;
 use warnings;
 
-my $TorrentCommand = "transmission-remote --auth username:abcde12345 -a";
+my $HOME = $ENV{HOME};
+my $TRANSUSER = "$HOME/.transuser.txt";
+
+if (! -f $TRANSUSER)
+{
+	print "$TRANSUSER is not found. please create it with a line like:\n";
+	print "user:password\n";
+	exit 1;
+}
+
+open my $file, '<', $TRANSUSER or die("Unable to open $TRANSUSER: $!");
+my $TransUserString = <$file>;
+chop($TransUserString);
+close $file;
+
+my $TorrentCommand = "transmission-remote --auth \"$TransUserString\" -a";
 my $CurFile = shift;
 
 if ($CurFile eq "")
@@ -17,10 +32,3 @@ print "Adding torrent file $CurFile\n";
 system("$TorrentCommand /var/lib/transmission-daemon/downloads/$CurFile");
 
 exit 0;
-
-
-
-
-
-# transmission-remote -n 'singfun:singfun' -a /var/lib/transmission-daemon/downloads/Nintendo-GameBoy-GameBoyColor.7z.torrent 
-
