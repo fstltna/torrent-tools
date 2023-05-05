@@ -5,7 +5,10 @@ use warnings;
 
 my $HOME = $ENV{HOME};
 my $TRANSUSER = "$HOME/.transuser.txt";
+my $VERSION = "1.0";
 
+print "torrentcmd v$VERSION\n";
+print "===============\n";
 if (! -f $TRANSUSER)
 {
 	print "$TRANSUSER is not found. please create it with a line like:\n";
