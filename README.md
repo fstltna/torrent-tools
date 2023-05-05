@@ -1,11 +1,13 @@
-# torrent-tools
+# Torrent Tools v1.1
 My tools for working with torrents
 
-Files included:
+Tools included:
 ===============
-mytorrent	Creates a torrent file for the given source file
-torrentcmd	Add files to the local transmission daemon
-updatetrackers	Updates the list of trackers from the server
-zipup		Zip up files with the given extension with the desired
-		compression tool
+
+|Tool Name     |Tool Description                                                       |
+|--------------|-----------------------------------------------------------------------|
+|mytorrent (1.0)|Creates a torrent file for the given source file                       |
+|torrentcmd (1.0)|Add files to the local transmission daemon                             |
+|updatetrackers (1.0)|Updates the list of trackers from the server                           |
+|zipup (1.0)|Zip up files with the given extension with the desired compression tool|
 
