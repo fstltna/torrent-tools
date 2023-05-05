@@ -9,7 +9,10 @@ my $ZIPEXT = "";
 my $FILETYPE = $ARGV[0];
 my $ZIPFORMAT = $ARGV[1];
 my $REMOVE_ORIG = "";
+my $VERSION = "1.0";
 
+print "zipup v$VERSION\n";
+print "===========\n";
 if ($ARGV[2] eq "remove")
 {
 	$REMOVE_ORIG = "TRUE";
