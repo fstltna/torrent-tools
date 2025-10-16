@@ -1,0 +1,75 @@
+#!/usr/bin/perl
+#
+# unzips all the files of specified type
+#
+use warnings;
+
+
+my $ZIPCMD = "";
+my $ZIPEXT = "";
+my $ZIPFORMAT = $ARGV[0];
+my $REMOVE_ORIG = "";
+my $VERSION = "1.0";
+
+print "extractall v$VERSION\n";
+print "==================\n";
+if ($ARGV[1] eq "remove")
+{
+	$REMOVE_ORIG = "TRUE";
+}
+
+if ($ZIPFORMAT eq "")
+{
+	print("Usage:\nexreactall \<FILE TYPE\> \<COMPRESSION TYPE\> \[remove\]\n");
+	print("COMPRESSION TYPE: zip | 7z | ciso\n");
+	print("remove: delete the original file after compression\n");
+	exit 1;
+}
+print ("Processing file type = $ZIPFORMAT\n");
+
+if ($ZIPFORMAT eq "zip")
+{
+	$ZIPCMD = "/usr/bin/unzip";
+	$ZIPEXT = "zip";
+	print ("Extracting ZIP files\n");
+}
+elsif ($ZIPFORMAT eq "7z")
+{
+	$ZIPCMD = "/usr/bin/7z e";
+	$ZIPEXT = "7z";
+	print ("Extracting 7ZIP files\n");
+}
+else
+{
+	print("You must specify a compression format:\nzip\n7z\n");
+	exit (1);
+}
+
+if ($REMOVE_ORIG ne "")
+{
+	print("Deleting source after expansion\n");
+}
+
+my $TYPELEN = length($ZIPFORMAT);
+
+my $dirname = '.';
+opendir(DIR, $dirname) or die "Could not open the directory $dirname\n";
+
+while (my $filename = readdir(DIR))
+{
+#	print "$filename\n";
+	if (substr($filename, -$TYPELEN) eq $ZIPFORMAT)
+	{
+		print "File $filename matched\n";
+		system("$ZIPCMD \"$filename\"");
+		if ($REMOVE_ORIG ne "")
+		{
+			print "Deleting original $ZIPFORMAT file...\n";
+			unlink($filename);
+		}
+	}
+}
+
+closedir(DIR);
+
+exit 0;
