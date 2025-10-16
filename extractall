@@ -20,8 +20,8 @@ if ($ARGV[1] eq "remove")
 
 if ($ZIPFORMAT eq "")
 {
-	print("Usage:\nexreactall \<FILE TYPE\> \<COMPRESSION TYPE\> \[remove\]\n");
-	print("COMPRESSION TYPE: zip | 7z | ciso\n");
+	print("Usage:\nexreactall \<COMPRESSION TYPE\> \[remove\]\n");
+	print("COMPRESSION TYPE: zip | rar | 7z\n");
 	print("remove: delete the original file after compression\n");
 	exit 1;
 }
@@ -32,6 +32,12 @@ if ($ZIPFORMAT eq "zip")
 	$ZIPCMD = "/usr/bin/unzip";
 	$ZIPEXT = "zip";
 	print ("Extracting ZIP files\n");
+}
+elsif ($ZIPFORMAT eq "rar")
+{
+	$ZIPCMD = "/usr/bin/unrar e";
+	$ZIPEXT = "rar";
+	print ("Extracting RAR files\n");
 }
 elsif ($ZIPFORMAT eq "7z")
 {
