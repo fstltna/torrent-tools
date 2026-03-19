@@ -1,0 +1,58 @@
+#!/usr/bin/perl
+#
+# unzips all the files of specified type
+#
+use warnings;
+
+
+my $ZIPCMD = "/usr/bin/zip -9r";
+my $UN7ZCMD = "/usr/bin/7z e";
+my $REMOVE_ORIG = "";
+my $VERSION = "1.0";
+
+print "convert7z v$VERSION - Converts 7z archives to plain zip\n";
+print "=========================================================\n";
+if ($ARGV[0] eq "remove")
+{
+	$REMOVE_ORIG = "TRUE";
+}
+
+print ("Processing file type = 7zip\n");
+
+print ("Creating ZIP files\n");
+
+if ($REMOVE_ORIG ne "")
+{
+	print("Deleting source after conversion\n");
+}
+
+my $dirname = '.';
+opendir(DIR, $dirname) or die "Could not open the directory $dirname\n";
+
+while (my $filename = readdir(DIR))
+{
+#	print "$filename\n";
+	if (substr($filename, -2) eq "7z")
+	{
+		print "File $filename matched\n";
+		my $BaseName = substr($filename, 0, length($filename) - 3);
+		# print "basename $BaseName\n";
+		mkdir($BaseName);
+		chdir($BaseName);
+		# Extract 7z archive
+		system("$UN7ZCMD \"../$filename\"");
+		chdir("..");
+		# Create the zip file
+		system("$ZIPCMD \"$BaseName.zip\" \"$BaseName\"");
+
+		if ($REMOVE_ORIG ne "")
+		{
+			print "Deleting original 7zip file...\n";
+			unlink($filename);
+		}
+		system("rm -r \"$BaseName\"");
+	}
+}
+
+closedir(DIR);
+exit 0;
