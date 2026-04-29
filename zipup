@@ -53,7 +53,7 @@ elsif ($ZIPFORMAT eq "chd")
 }
 else
 {
-	print("You must specify a compression format:\nzip\n7z\nciso\n");
+	print("You must specify a compression format:\nzip\n7z\nciso\nchd\n");
 	exit (1);
 }
 
@@ -84,7 +84,8 @@ while (my $filename = readdir(DIR))
 		}
 		elsif ($ZIPFORMAT eq "chd")
 		{
-			my $Basename = substr($filename, 0, -4);
+			my $NewLen = $TYPELEN + 1;
+			my $Basename = substr($filename, 0, -$NewLen);
 			system("$ZIPCMD -i \"$filename\" -o \"$Basename.$ZIPEXT\"");
 			if ($REMOVE_ORIG ne "")
 			{
