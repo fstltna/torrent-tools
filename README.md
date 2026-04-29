@@ -16,4 +16,5 @@ Tools included:
 Install these:
 
 * sudo apt install mame-tools
+* sudo apt install ciso
 
