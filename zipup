@@ -21,7 +21,7 @@ if ($ARGV[2] eq "remove")
 if ($FILETYPE eq "")
 {
 	print("Usage:\nzipup \<FILE TYPE\> \<COMPRESSION TYPE\> \[remove\]\n");
-	print("COMPRESSION TYPE: zip | 7z | ciso\n");
+	print("COMPRESSION TYPE: zip | 7z | ciso | chd\n");
 	print("remove: delete the original file after compression\n");
 	exit 1;
 }
@@ -44,6 +44,12 @@ elsif ($ZIPFORMAT eq "ciso")
 	$ZIPCMD = "/usr/bin/ciso 9";
 	$ZIPEXT = "cso";
 	print ("Compressing with ciso\n");
+}
+elsif ($ZIPFORMAT eq "chd")
+{
+	$ZIPCMD = "/usr/bin/chdman createcd";
+	$ZIPEXT = "chd";
+	print ("Compressing with chdman\n");
 }
 else
 {
@@ -70,6 +76,16 @@ while (my $filename = readdir(DIR))
 		if ($ZIPFORMAT eq "ciso")
 		{
 			system("$ZIPCMD \"$filename\" \"$filename.$ZIPEXT\"");
+			if ($REMOVE_ORIG ne "")
+			{
+				print "Deleting original $FILETYPE file...\n";
+				unlink($filename);
+			}
+		}
+		elsif ($ZIPFORMAT eq "chd")
+		{
+			my $Basename = substr($filename, 0, -4);
+			system("$ZIPCMD -i \"$filename\" -o \"$Basename.$ZIPEXT\"");
 			if ($REMOVE_ORIG ne "")
 			{
 				print "Deleting original $FILETYPE file...\n";
