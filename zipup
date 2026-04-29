@@ -9,7 +9,7 @@ my $ZIPEXT = "";
 my $FILETYPE = $ARGV[0];
 my $ZIPFORMAT = $ARGV[1];
 my $REMOVE_ORIG = "";
-my $VERSION = "1.1";
+my $VERSION = "1.2";
 
 print "zipup v$VERSION\n";
 print "===========\n";
