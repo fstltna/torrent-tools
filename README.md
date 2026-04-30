@@ -17,4 +17,5 @@ Install these:
 
 * sudo apt install mame-tools
 * sudo apt install ciso
+* sudo apt install p7zip-full
 
