@@ -1,0 +1,55 @@
+#!/usr/bin/perl
+#
+# Extracts zip files of the given letter
+#
+
+
+my $STARTLETTER = $ARGV[0];
+my $REMOVE_ORIG = "";
+my $VERSION = "1.0";
+
+print "extractzip v$VERSION\n";
+print "==================\n";
+if ($ARGV[1] eq "remove")
+{
+	$REMOVE_ORIG = "TRUE";
+}
+
+if ($STARTLETTER eq "")
+{
+	print("Usage:\nextractzip \<FIRST LETTER\> \[remove\]\n");
+	print("remove: delete the original file after extraction\n");
+	exit 1;
+}
+print ("Converting files\n");
+
+my $ZIPCMD = "/usr/bin/unzip";
+
+if ($REMOVE_ORIG ne "")
+{
+	print("Deleting source after extraction\n");
+}
+
+my $dirname = '.';
+opendir(DIR, $dirname) or die "Could not open the directory $dirname\n";
+
+while (my $filename = readdir(DIR))
+{
+	# print "$filename\n";
+	if ((substr($filename, 0, 1) eq $STARTLETTER) && (substr($filename, -4) eq ".zip"))
+	{
+		print "File $filename matched\n";
+		#my $Basename = substr($filename, 0, -4);
+		# print "new name = $Basename\n";
+		system("$ZIPCMD \"$filename\"");
+		if ($REMOVE_ORIG ne "")
+		{
+			print "Deleting original file...\n";
+			unlink($filename);
+		}
+	}
+}
+
+closedir(DIR);
+
+exit 0;
